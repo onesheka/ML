@@ -1,0 +1,21 @@
+train_features = train_df[['number_of_people_coming','no_of_people_leaving']]
+train_target = train_df['price']
+
+features = train_df.columns.tolist()
+features.remove('cost')
+
+parameters = [X for X in range(1,21)]
+mse_values = []
+k_mse_values = {}
+
+for i, k_value in enumerate(parameters):
+    knn = KNeighborsRegressor(n_neighbors=k_value, algorithm='brute')
+    knn.fit(train_df[features], train_df['cost'])
+    predictions = knn.predict(test_df[features])
+    mse_values.append(mean_squared_error(y_true=test_df['cost'], y_pred=predictions))
+    k_mse_values[mse_values[i]] = k_value
+    print('When k={kv}, mse={mse}'.format(kv=k_value, mse=mse_values[i]))
+
+
+plt.scatter(hyper_parameters, mse_values)
+plt.show()
