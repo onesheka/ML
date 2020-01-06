@@ -1,0 +1,20 @@
+import pandas as pd
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.metrics import mean_squared_error
+
+train_features = train_df[['accommodates','bedrooms']]
+train_target = train_df['price']
+
+features = ['accomodates','bedrooms','bathrooms','number_of_reviews']
+
+hyper_params = [1,2,3,4,5,6,7,8]
+mse_values = []
+
+for r in hyper_params:
+        knn = KNeighborsRegressor(n_neighbors = r, algorithm='brute')
+        train_columns = ['accommodates', 'bathrooms', 'bedrooms', 'number_of_reviews']
+        knn.fit(train_df[train_columns], train_df['price'])
+        predictions = knn.predict(test_df[train_columns])
+        
+        mse_values = mean_squared_error(test_df["price"], predictions)
+        print('When k={kval}, mse={mse}'.format(kval=r, mse=mse_values))
